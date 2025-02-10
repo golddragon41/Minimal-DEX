@@ -15,6 +15,7 @@ contract Pair is IPair, ERC20 {
     using UQ112x112 for uint224;
 
     uint public constant MINIMUM_LIQUIDITY = 10 ** 3;
+    uint public constant SWAP_FEE = 2;  // 0.2% (2/1000)
 
     address public factory;
     address public token0;
@@ -94,6 +95,17 @@ contract Pair is IPair, ERC20 {
     ) external returns (uint liquidity) {
         if (amount0In == 0 || amount1In == 0) revert InsufficientInputAmount();
 
+        (uint112 _reserve0, uint112 _reserve1, ) = getReserves();
+
+        /* 
+        Check if token ratio is proportional to reserve ratio
+        reserve0 / reserve1 = amount0In / amount1In
+        reserve0 * amount1In = reserve1 * amount0In
+        */
+        if (_reserve0 > 0 || _reserve1 > 0) {
+            if (amount0In * _reserve1 != amount1In * _reserve0) revert UnbalancedInputAmount();
+        }
+
         // Transfer both tokens to liquidity pool
         SafeTransfer.safeTransferFrom(
             token0,
@@ -107,10 +119,22 @@ contract Pair is IPair, ERC20 {
             address(this),
             amount1In
         );
-
-        (uint112 _reserve0, uint112 _reserve1, ) = getReserves();
+        
         uint balance0 = IERC20(token0).balanceOf(address(this));
         uint balance1 = IERC20(token1).balanceOf(address(this));
+
+        /*
+        Calculate number of liquidity shares to mint using
+        the geometric mean as a measure of liquidity. Increase
+        in liquidity is proportional to increase in shares
+        minted.
+        > liquidity = (amount0In / _reserve0) * totalSupply
+        > liquidity = (amount1In / _reserve1) * totalSupply
+        NOTE: Amount of liquidity shares minted formula is similar
+        to Uniswap V2 formula. For minting liquidity shares, we take
+        the minimum of the two values calculated to incentivize depositing
+        balanced liquidity.
+        */
 
         uint _totalSupply = totalSupply;
         if (_totalSupply == 0) {
@@ -146,6 +170,11 @@ contract Pair is IPair, ERC20 {
         uint balance0 = IERC20(_token0).balanceOf(address(this));
         uint balance1 = IERC20(_token1).balanceOf(address(this));
 
+        /*
+        Function for user to remove liquidity
+        > amount0Out = (liquidity / totalSupply) * balance0
+        > amount1Out = (liquidity / totalSupply) * balance1
+        */
         uint _totalSupply = totalSupply;
         amount0Out = liquidity.mul(balance0) / _totalSupply;
         amount1Out = liquidity.mul(balance1) / _totalSupply;
@@ -196,8 +225,17 @@ contract Pair is IPair, ERC20 {
         );
 
         // Apply 0.2% swap fee
-        uint amountInWithFee = amountIn.mul(998).div(1000);
-        // Calculate output amount
+        uint amountInWithFee = amountIn.mul(1000 - SWAP_FEE).div(1000);
+        /*
+        Calculate output amount using x * y = k
+        > (x + dx) * (y + dy) = k`
+        > y - dy = (xy) / (x + dx)
+        > dy = y - ((xy) / (x + dx))
+        > dy = y * (1 - (x / (x + dx)))
+        > dy = y * (((x + dx) / (x + dx)) - (x / (x + dx)))
+        > dy = y * (dx / (x + dx))
+        ~~~ dy = (y * dx) / (x + dx) ~~~
+        */
         _amountOut = reserveOut.mul(amountInWithFee).div(reserveIn.add(amountInWithFee));
         if (_amountOut > reserveOut) revert InsufficientLiquidity();
 
