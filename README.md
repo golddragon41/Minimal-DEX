@@ -45,17 +45,17 @@ forge script script/foundry/MinimalDex.s.sol --rpc-url https://sepolia.gateway.t
 forge verify-contract <deployed-contract-address> MinimalDex --constructor-args $(cast abi-encode "constructor(address)" "<your-wallet-address>") --compiler-version 0.8.28 --chain sepolia
 ```
 
-## Using Hardhat Ignition
-### 1. Installing npm packages
+### Using Hardhat Ignition
+#### 1. Installing npm packages
 ```
 npm i
 ```
-### 2. Compiling the Contract
+#### 2. Compiling the Contract
 ```
 npx hardhat compile
 ```
 
-### 3. Running the tests
+#### 3. Running the tests
 To execute tests, run:
 ```
 npx hardhat test
@@ -65,17 +65,17 @@ You can also measure gas usage during tests by running:
 REPORT_GAS=true npx hardhat test
 ```
 
-### 4. Deploying locally
+#### 4. Deploying locally
 ```
 npx hardhat ignition deploy ./ignition/modules/MinimalDex.ts --network hardhat
 ```
 
-### 5. Deploying to Sepolia Testnet
+#### 5. Deploying to Sepolia Testnet
 ```
 npx hardhat ignition deploy ./ignition/modules/MinimalDex.ts --network sepoliaTestnet
 ```
 
-### 6. Verifying the contract
+#### 6. Verifying the contract
 ```
 npx hardhat verify --network sepoliaTestnet <contract-address> <your-wallet-address>
 ```
