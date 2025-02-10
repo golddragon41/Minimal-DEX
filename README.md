@@ -71,5 +71,21 @@ npx hardhat ignition deploy ./ignition/modules/MinimalDex.ts --network hardhat
 npx hardhat ignition deploy ./ignition/modules/MinimalDex.ts --network sepoliaTestnet
 ```
 
+## Architecture Diagram
+### Contracts Hierachy
+![alt text](doc/hierachy.png)
+### Workflow
+- Create a Liquidity Pool
+Deploy the Pair Contract using create2 and initialize the Pair Contract
+![alt text](doc/create-pool.png)
+- Adding Liquidity
+The liquidity minted is based on the amount of the lesser token relative to the pool’s reserves, ensuring liquidity shares are proportional to the pool’s balance.
+![alt text](doc/add-liquidity.png)
+- Removing Liquidity
+When removing liquidity, the function calculates how much of each token should be returned based on the user’s share of the liquidity pool.
+![alt text](doc/remove-liquidity.png)
+- Swapping tokens
+The swap function allows a user to swap token0 for token1, or vice versa, using the reserve0 and reserve1 values.
+![alt text](doc/swap-tokens.png)
 ## Conclusion
 This project serves as a foundation for understanding the basic mechanisms of a decentralized exchange, using cutting-edge tools like Foundry and Hardhat Ignition for testing and deployment. Feel free to explore, extend, and experiment with the code!

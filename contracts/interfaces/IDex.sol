@@ -9,10 +9,8 @@ interface IDex {
         uint len
     );
 
-    function feeRecipient() external view returns (address);
     function owner() external view returns (address);
 
-    function setFeeRecipient(address) external;
     function setOwner(address) external;
 
     function getPair(

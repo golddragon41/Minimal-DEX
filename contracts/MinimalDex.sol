@@ -6,7 +6,6 @@ import "./Pair.sol";
 import "./Errors.sol";
 
 contract MinimalDex is IDex {
-    address public feeRecipient;
     address public owner;
 
     mapping(address => mapping(address => address)) public getPair;
@@ -49,11 +48,6 @@ contract MinimalDex is IDex {
         allPairs.push(pair);
 
         emit PairCreated(token0, token1, pair, allPairs.length);
-    }
-
-    function setFeeRecipient(address _feeRecipient) external {
-        if (msg.sender != owner) revert OnlyOwnerAllowed();
-        feeRecipient = _feeRecipient;
     }
 
     function setOwner(address _owner) external {
