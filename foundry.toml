@@ -1,0 +1,12 @@
+[profile.default]
+    src = "contracts"
+    test = "test/foundry"
+    script = "script/foundry"
+    out = "out"
+    libs = ["lib"]
+
+[etherscan]
+    sepolia = { key = "" }
+[rpc_endpoints]
+    localhost = "http://localhost:8545"
+    sepolia = "https://sepolia.gateway.tenderly.co"
