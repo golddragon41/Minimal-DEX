@@ -87,5 +87,9 @@ When removing liquidity, the function calculates how much of each token should b
 - Swapping tokens
 The swap function allows a user to swap token0 for token1, or vice versa, using the reserve0 and reserve1 values.
 ![alt text](doc/swap-tokens.png)
+
+## Deployed Address
+MinimalDex.sol: [0xf8C0A689600434ce3322fAD3e96dD6F877Ac4dD7](https://sepolia.etherscan.io/address/0xf8C0A689600434ce3322fAD3e96dD6F877Ac4dD7)
+
 ## Conclusion
 This project serves as a foundation for understanding the basic mechanisms of a decentralized exchange, using cutting-edge tools like Foundry and Hardhat Ignition for testing and deployment. Feel free to explore, extend, and experiment with the code!
