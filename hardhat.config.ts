@@ -22,7 +22,7 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
-      sepoliaTestnet: "DE2RFURK3FQCGYQNB85MCI5MKCCCFV73P2"
+      sepolia: "DE2RFURK3FQCGYQNB85MCI5MKCCCFV73P2"
     }
   }
 };

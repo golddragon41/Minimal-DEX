@@ -38,7 +38,11 @@ forge script script/foundry/MinimalDex.s.sol --rpc-url 127.0.0.1:8545 --private-
 #### 4. Deploying to Sepolia Testnet
 Ensure you have enough balance in your wallet and your etherscan api key in foundry.toml execute the following:
 ```
-forge script script/foundry/MinimalDex.s.sol --rpc-url https://sepolia.gateway.tenderly.co --private-key <your_private_key> --slow --broadcast --verify
+forge script script/foundry/MinimalDex.s.sol --rpc-url https://sepolia.gateway.tenderly.co --private-key <your_private_key> --slow --broadcast
+```
+#### 5. Verifying smart contract.
+```
+forge verify-contract <deployed-contract-address> MinimalDex --constructor-args $(cast abi-encode "constructor(address)" "<your-wallet-address>") --compiler-version 0.8.28 --chain sepolia
 ```
 
 ## Using Hardhat Ignition
@@ -51,7 +55,7 @@ npm i
 npx hardhat compile
 ```
 
-### Running the tests
+### 3. Running the tests
 To execute tests, run:
 ```
 npx hardhat test
@@ -61,14 +65,19 @@ You can also measure gas usage during tests by running:
 REPORT_GAS=true npx hardhat test
 ```
 
-### Deploying locally
+### 4. Deploying locally
 ```
 npx hardhat ignition deploy ./ignition/modules/MinimalDex.ts --network hardhat
 ```
 
-### Deploying to Sepolia Testnet
+### 5. Deploying to Sepolia Testnet
 ```
 npx hardhat ignition deploy ./ignition/modules/MinimalDex.ts --network sepoliaTestnet
+```
+
+### 6. Verifying the contract
+```
+npx hardhat verify --network sepoliaTestnet <contract-address> <your-wallet-address>
 ```
 
 ## Architecture Diagram

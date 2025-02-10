@@ -6,7 +6,7 @@
     libs = ["lib"]
 
 [etherscan]
-    sepolia = { key = "" }
+    sepolia = { key = "DE2RFURK3FQCGYQNB85MCI5MKCCCFV73P2" }
 [rpc_endpoints]
     localhost = "http://localhost:8545"
     sepolia = "https://sepolia.gateway.tenderly.co"
